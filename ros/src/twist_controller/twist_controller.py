@@ -68,7 +68,7 @@ class Controller(object):
 
         rospy.logwarn("Throttle: {0}".format(throttle))
         rospy.logwarn("Brake: {0}".format(brake))
-        rospy.logwarn("Steering: {0}".formbrake))
+        rospy.logwarn("Steering: {0}".format(steering))
 
         # Return throttle, brake, steer
         # return 1., 0., 0.
