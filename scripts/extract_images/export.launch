@@ -1,0 +1,8 @@
+<launch>
+<arg name="bagfile" />
+<arg name="topic" />
+<node pkg="rosbag" type="play" name="rosbag" args="$(arg bagfile)" />
+<node name="extract" pkg="image_view" type="image_saver" respawn="false" output="screen" cwd="ROS_HOME">
+<remap from="image" to="$(arg topic)" />
+</node>
+</launch>
