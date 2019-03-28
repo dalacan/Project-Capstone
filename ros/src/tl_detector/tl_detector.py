@@ -10,6 +10,7 @@ from light_classification.tl_classifier import TLClassifier
 import tf
 import cv2
 import yaml
+from scipy.spatial import KDTree
 
 STATE_COUNT_THRESHOLD = 3
 
@@ -21,6 +22,7 @@ class TLDetector(object):
         self.waypoints = None
         self.camera_image = None
         self.lights = []
+        self.waypoint_tree = None
 
         sub1 = rospy.Subscriber('/current_pose', PoseStamped, self.pose_cb)
         sub2 = rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb)
@@ -57,6 +59,11 @@ class TLDetector(object):
 
     def waypoints_cb(self, waypoints):
         self.waypoints = waypoints
+        if not self.waypoint_tree:
+            base_waypoint_array = [[waypoint.pose.pose.position.x, waypoint.pose.pose.position.y] for waypoint in
+                                   waypoints.waypoints]
+            self.waypoint_tree = KDTree(base_waypoint_array)
+
 
     def traffic_cb(self, msg):
         self.lights = msg.lights
@@ -88,8 +95,10 @@ class TLDetector(object):
             # the waypoint closest to the red light's stop line to traffic waypoint, else set the index to -1
             light_wp = light_wp if state == TrafficLight.RED else -1
             self.last_wp = light_wp
+            rospy.logdebug('publishing ' + str(light_wp))
             self.upcoming_red_light_pub.publish(Int32(light_wp))
         else:
+            rospy.logdebug('publishing es ' + str(self.last_wp))
             self.upcoming_red_light_pub.publish(Int32(self.last_wp)) #publish the last index of the waypoint
         self.state_count += 1
 
@@ -116,6 +125,7 @@ class TLDetector(object):
 
         Returns:
             int: ID of traffic light color (specified in styx_msgs/TrafficLight)
+            UNKNOWN=4 GREEN=2 YELLOW=1 RED=0
 
         """
         # For testing, just return the light state
@@ -127,7 +137,7 @@ class TLDetector(object):
 
         cv_image = self.bridge.imgmsg_to_cv2(self.camera_image, "bgr8")
 
-        #Get classification
+        #Get classification, return the state
         return self.light_classifier.get_classification(cv_image)
 
     def process_traffic_lights(self):
