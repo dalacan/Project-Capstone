@@ -33,7 +33,7 @@ class Controller(object):
 
         self.last_time = rospy.get_time()
 
-    def control(self, linear_vel, angular_vel, current_vel, dbw_enabled):
+    def control(self, linear_vel, angular_vel, current_vel, current_ang_vel, dbw_enabled):
         # TODO: Change the arg, kwarg list to suit your needs
 
         if not dbw_enabled:
@@ -46,8 +46,12 @@ class Controller(object):
         rospy.logwarn("Target vel: {0}".format(linear_vel))
         rospy.logwarn("Current vel: {0}".format(current_vel))
 
-        steering = self.yaw_controller.get_steering(linear_vel, angular_vel, current_vel)
-        
+        # If the difference between current angular velocity and target angular velocity is less than a set threshold, do not update steering
+        if abs(current_ang_vel - angular_vel) > 0.01:
+            steering = self.yaw_controller.get_steering(linear_vel, angular_vel, current_vel)
+        else:
+            steering = None
+            
         vel_error = linear_vel - current_vel
         self.last_vel = current_vel
 

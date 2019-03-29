@@ -87,6 +87,7 @@ class DBWNode(object):
                 self.throttle, self.brake, self.steering = self.controller.control(self.linear_vel,
                                                                                    self.angular_vel,
                                                                                     self.current_vel,
+                                                                                    self.current_ang_vel,
                                                                                     self.dbw_enabled)
             if self.dbw_enabled:
                 self.publish(self.throttle, self.brake, self.steering)
@@ -104,6 +105,7 @@ class DBWNode(object):
 
     def velocity_cb(self, msg):
         self.current_vel = msg.twist.linear.x
+        self.current_ang_vel = msg.twist.angular.z
 
     def publish(self, throttle, brake, steer):
         tcmd = ThrottleCmd()
@@ -114,8 +116,10 @@ class DBWNode(object):
 
         scmd = SteeringCmd()
         scmd.enable = True
-        scmd.steering_wheel_angle_cmd = steer
-        self.steer_pub.publish(scmd)
+        # If steering is not set, do not update steering
+        if steer is not None:
+            scmd.steering_wheel_angle_cmd = steer
+            self.steer_pub.publish(scmd)
 
         bcmd = BrakeCmd()
         bcmd.enable = True
