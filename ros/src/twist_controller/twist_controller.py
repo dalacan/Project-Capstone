@@ -24,6 +24,8 @@ class Controller(object):
         ts = .02 # Sample time
         self.vel_lpf = LowPassFilter(tau, ts)
 
+        self.ang_vel_lpf = LowPassFilter(tau, ts)
+
         self.vehicle_mass = vehicle_mass
         self.fuel_capacity = fuel_capacity
         self.brake_deadband = brake_deadband
@@ -41,6 +43,7 @@ class Controller(object):
             return 0., 0., 0.
 
         current_vel = self.vel_lpf.filt(current_vel)
+        current_ang_vel = self.ang_vel_lpf.filt(current_ang_vel)
 
         rospy.logwarn("Angular vel: {0}".format(angular_vel))
         rospy.logwarn("Target vel: {0}".format(linear_vel))
