@@ -80,7 +80,8 @@ class DBWNode(object):
         self.loop()
 
     def loop(self):
-        rate = rospy.Rate(50) # 50Hz
+       #rate = rospy.Rate(50) # 50Hz
+        rate = rospy.Rate(50)  # the publish rate of throttle, steering and brake commands is set at 10Hz (instead of 50Hz).
         while not rospy.is_shutdown():
             # TODO: Get predicted throttle, brake, and steering using `twist_controller`
             if not None in (self.current_vel, self.linear_vel, self.angular_vel):
