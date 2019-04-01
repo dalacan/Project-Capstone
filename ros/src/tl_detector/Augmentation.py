@@ -170,3 +170,4 @@ def add_fog(image, fog_coeff=-1):
         image_RGB = image
 
     return image_RGB
+   # reference: Automold--Road-Augmentation-Library
