@@ -47,8 +47,11 @@ class TLDetector(object):
 
         self.bridge = CvBridge()
 
-        self.use_simulator = rospy.get_param('~simulator_used')
-        self.light_classifier = TLClassifier(simulator = self.use_simulator)
+        # self.use_simulator = rospy.get_param('~simulator_used')
+        self.use_simulator = not self.config['is_site']
+        
+        # rospy.logwarn('use simulator {0}'.format(self.use_simulator))
+        self.light_classifier = TLClassifier(self.use_simulator)
 
         self.listener = tf.TransformListener()
 
