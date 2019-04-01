@@ -13,7 +13,7 @@ from io import StringIO
 
 class TLClassifier(object):
     def __init__(self, simulator):
-        current_path = os.path.dirname(os.path.realpath(__file__))
+        # current_path = os.path.dirname(os.path.realpath(__file__))
         self.simulator_used = simulator
 
         # We support two different frozen graphes which are trained with
@@ -21,10 +21,11 @@ class TLClassifier(object):
         # where the application is executed (car or simulator) different
         # models are loaded.
         if (self.simulator_used == 1):
-            model_path = current_path + '/classifiers/inference_graph_sim.pb'
+            model_path = 'light_classification/classifiers/inference_graph_sim.pb'
         else:
-            model_path = current_path + '/classifiers/inference_graph_real.pb'
-        pass
+            model_path = 'light_classification/classifiers/inference_graph_real.pb'
+
+        rospy.logwarn('model path {0}'.format(model_path))
 
         detection_graph = self.load_graph(model_path)
 
@@ -83,16 +84,22 @@ class TLClassifier(object):
         scores = np.squeeze(scores)
         classes = np.squeeze(classes)
 
+        # Debug classifications
+        # rospy.logwarn('TF classes {0} and scores {1}'.format(classes, scores))
+
         # Find traffic light with highest confidence level
         conv_level = 0
         for i in range(boxes.shape[0]):
             if scores[i] > conv_level:
                 conv_level = scores[i]
-                if classes[i] == 1: #'Green':
+                if classes[i] == 2: #'Green':
                     result = TrafficLight.GREEN
-                elif classes[i]  == 2: #'Red':
+                elif classes[i]  == 4: #'Red':
                     result = TrafficLight.RED
                 elif classes[i]  == 3: #'Yellow':
                     result = TrafficLight.YELLOW
         
+        # Debug traffic light output - Red: 0, 1: Yellow, 2: Green, 4: Unknown
+        rospy.logwarn('Traffic light {0}'.format(result))
+
         return result
