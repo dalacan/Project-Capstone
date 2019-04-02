@@ -10,7 +10,7 @@ import tensorflow as tf
 from styx_msgs.msg import TrafficLight
 from io import StringIO
 
-MINIMUM_CONFIDENCE = 0.2
+MINIMUM_CONFIDENCE = 0.4
 
 class TLClassifier(object):
     def __init__(self, simulator):

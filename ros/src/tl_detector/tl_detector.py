@@ -16,7 +16,7 @@ from scipy.spatial import KDTree
 
 #Test MZ
 STATE_COUNT_THRESHOLD = 3
-IMAGE_PROCESS_RATE = 4
+IMAGE_PROCESS_RATE = 5
 
 class TLDetector(object):
     def __init__(self):
