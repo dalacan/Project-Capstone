@@ -1,5 +1,23 @@
 This is the project repo for the final project of the Udacity Self-Driving Car Nanodegree: Programming a Real Self-Driving Car. For more information about the project, see the project introduction [here](https://classroom.udacity.com/nanodegrees/nd013/parts/6047fe34-d93c-4f50-8336-b70ef10cb4b2/modules/e1a23b06-329a-4684-a717-ad476f0d8dff/lessons/462c933d-9f24-42d3-8bdc-a08a5fc866e4/concepts/5ab4b122-83e6-436d-850f-9f4d26627fd9).
 
+## Traffic Light Classification
+
+The input messages are the car position and camera images, and the output of the detection and classification is the 
+state of the traffic light, and the index of the closest stop line (-1 if not exists). 
+
+The ```get_light_state( )``` function can determine the current color of the traffic light (ID of traffic light color,
+ UNKNOWN=4, GREEN=2, YELLOW=1, RED=0). The traffic light state detection and classification was finished by the 
+ function ```get_classification(image)``` in class ```TLClassifier``` which is coded in ```tl_classifier.py```. The ```process_traffic_lights()``` 
+ can find the closest visible traffic light (index of waypoint closes to the upcoming stop line for a traffic light), 
+ and determines its location and color in ```tl_detector.py```.
+ 
+ However, the current detected state are not be regarded as the predicted traffic light state. The predicted state has 
+ to occur *STATE_COUNT_THRESHOLD* number of times till we start using it; otherwise the previous stable state is used. 
+ This is applied as a damper to avoid the sudden velocity change, and smooth the vehicle behaviour. The ```image_cb( )``` 
+ identifies the upcoming red light at camera frequency, and publishesthe index of the waypoint closest to the red 
+ light's stop line to ```/traffic_waypoint```. 
+ 
+
 Please use **one** of the two installation options, either native **or** docker installation.
 
 ### Native Installation
