@@ -24,7 +24,10 @@ as well as to verify your TL classifier.
 TODO (for Yousuf and Aaron): Stopline location for each traffic light.
 '''
 
-LOOKAHEAD_WPS = 200 # Number of waypoints we will publish. You can change this number
+# Number of waypoints we will publish.
+# Udacity workspace simulator: 50
+# Default 200
+LOOKAHEAD_WPS = 50 
 MAX_DECEL = .5
 
 class WaypointUpdater(object):
@@ -35,7 +38,7 @@ class WaypointUpdater(object):
 		rospy.Subscriber('/base_waypoints', Lane, self.waypoints_cb)
 		
 		# TODO: Add a subscriber for /traffic_waypoint and /obstacle_waypoint below
-		rospy.Subscriber('/traffic_waypoint', Int32, self.traffic_cb)
+		rospy.Subscriber('/traffic_waypoint', Int32, self.traffic_cb, queue_size = 1)
 		self.final_waypoints_pub = rospy.Publisher('final_waypoints', Lane, queue_size=1)
 		
 		# TODO: Add other member variables you need below
@@ -50,7 +53,8 @@ class WaypointUpdater(object):
 	
 	def loop(self):
 		# Waypoint update rate 30hz
-		rate = rospy.Rate(30)
+		# For the udacity workspace simulator, set to 2Hz
+		rate = rospy.Rate(2)
 		while not rospy.is_shutdown():
 			if self.pose and self.base_waypoints:
 				

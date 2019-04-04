@@ -16,7 +16,7 @@ from scipy.spatial import KDTree
 
 #Test MZ
 STATE_COUNT_THRESHOLD = 3
-IMAGE_PROCESS_RATE = 5
+IMAGE_PROCESS_RATE = 6
 
 class TLDetector(object):
     def __init__(self):
@@ -39,7 +39,7 @@ class TLDetector(object):
         rely on the position of the light and the camera image to predict it.
         '''
         sub3 = rospy.Subscriber('/vehicle/traffic_lights', TrafficLightArray, self.traffic_cb)
-        sub6 = rospy.Subscriber('/image_color', Image, self.image_cb)
+        sub6 = rospy.Subscriber('/image_color', Image, self.image_cb, queue_size = 1)
 
         config_string = rospy.get_param("/traffic_light_config")
         self.config = yaml.load(config_string)
@@ -89,6 +89,8 @@ class TLDetector(object):
             msg (Image): image from car-mounted camera
 
         """
+        # now = rospy.get_time()
+        # rospy.logwarn('image subscribed at {0}'.format(now))
         self.has_image = True
         self.camera_image = msg
 

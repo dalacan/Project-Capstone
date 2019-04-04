@@ -373,12 +373,12 @@ geometry_msgs::TwistStamped PurePursuit::go()
   //ROS_ERROR_STREAM("next waypoint = " <<  num_of_next_waypoint_);
 
   // if g_linear_interpolate_mode is false or next waypoint is first or last
-  if (!linear_interpolate_ || num_of_next_waypoint_ == 0 ||
-      num_of_next_waypoint_ == (static_cast<int>(current_waypoints_.getSize() - 1)))
-  {
+  // if (!linear_interpolate_ || num_of_next_waypoint_ == 0 ||
+  //     num_of_next_waypoint_ == (static_cast<int>(current_waypoints_.getSize() - 1)))
+  // {
     position_of_next_target_ = current_waypoints_.getWaypointPosition(num_of_next_waypoint_);
     return outputTwist(calcTwist(calcCurvature(position_of_next_target_), getCmdVelocity(0)));
-  }
+  // }
 
   // linear interpolation and calculate angular velocity
   interpolate_flag = interpolateNextTarget(num_of_next_waypoint_, &position_of_next_target_);

@@ -22,7 +22,8 @@ class Controller(object):
 
         tau = 0.5 # 1/(2pi*tau) = cutoff frequency
         # ts = .02 # Sample time (50 hertz)
-        ts = .033 # Sample time (30 hertz)
+        # ts = .033 # Sample time (30 hertz)
+        ts = .1 # Sample time (2 hertz)
         self.vel_lpf = LowPassFilter(tau, ts)
 
         self.vehicle_mass = vehicle_mass
@@ -60,6 +61,7 @@ class Controller(object):
 
         # Throttle to steering ratio function Reduce throttle for larger steerng
         # throttle = -0.0015625 * steering * steering + throttle
+        throttle = -0.0375*abs(steering) + throttle
 
         brake = 0
 

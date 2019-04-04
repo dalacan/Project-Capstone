@@ -80,7 +80,8 @@ class DBWNode(object):
         self.loop()
 
     def loop(self):
-        rate = rospy.Rate(30) # 50Hz
+        # For the udacity workspace simulator, set to 2Hz
+        rate = rospy.Rate(2) # 50Hz
         while not rospy.is_shutdown():
             # TODO: Get predicted throttle, brake, and steering using `twist_controller`
             if not None in (self.current_vel, self.linear_vel, self.angular_vel):

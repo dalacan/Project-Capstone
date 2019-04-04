@@ -78,9 +78,12 @@ class TLClassifier(object):
         result = TrafficLight.UNKNOWN
         
         # Perform detection
+        t1 = rospy.get_time()
         (boxes, scores, classes) = self.sess.run([self.detection_boxes, self.detection_scores, 
                                             self.detection_classes], 
                                             feed_dict={self.image_tensor: image_expanded})
+        t2 = rospy.get_time()
+        rospy.logwarn('inference time: {0}'.format((t2-t1)))
         # Remove unnecessary dimensions
         scores = np.squeeze(scores)
         classes = np.squeeze(classes)
