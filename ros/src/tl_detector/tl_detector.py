@@ -16,6 +16,7 @@ from scipy.spatial import KDTree
 
 #Test MZ
 STATE_COUNT_THRESHOLD = 3
+IMAGE_PROCESS_RATE = 5
 
 class TLDetector(object):
     def __init__(self):
@@ -60,6 +61,8 @@ class TLDetector(object):
         self.last_wp = -1
         self.state_count = 0
 
+        self.image_process_count = 0
+
         rospy.spin()
 
     def pose_cb(self, msg):
@@ -88,7 +91,15 @@ class TLDetector(object):
         """
         self.has_image = True
         self.camera_image = msg
-        light_wp, state = self.process_traffic_lights()
+
+        # Process every IMAGE_PROCESS_RATE images
+        if self.image_process_count == 0:
+            light_wp, state = self.process_traffic_lights()
+        else:
+            light_wp = self.last_wp
+            state = self.state
+
+        self.image_process_count = (self.image_process_count + 1)%IMAGE_PROCESS_RATE
 
         '''
         Publish upcoming red lights at camera frequency.
@@ -105,10 +116,10 @@ class TLDetector(object):
             # the waypoint closest to the red light's stop line to traffic waypoint, else set the index to -1
             light_wp = light_wp if state == TrafficLight.RED else -1
             self.last_wp = light_wp
-            rospy.logdebug('publishing ' + str(light_wp))
+            # rospy.logdebug('publishing ' + str(light_wp))
             self.upcoming_red_light_pub.publish(Int32(light_wp))
         else:
-            rospy.logdebug('publishing es ' + str(self.last_wp))
+            # rospy.logdebug('publishing es ' + str(self.last_wp))
             self.upcoming_red_light_pub.publish(Int32(self.last_wp)) #publish the last index of the waypoint
         self.state_count += 1
 
@@ -149,6 +160,7 @@ class TLDetector(object):
 
         #Get classification, return the state
         return self.light_classifier.get_classification(cv_image)
+        # return TrafficLight.GREEN
 
     def process_traffic_lights(self):
         """Finds closest visible traffic light, if one exists, and determines its

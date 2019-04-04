@@ -10,6 +10,7 @@ import tensorflow as tf
 from styx_msgs.msg import TrafficLight
 from io import StringIO
 
+MINIMUM_CONFIDENCE = 0.4
 
 class TLClassifier(object):
     def __init__(self, simulator):
@@ -88,7 +89,8 @@ class TLClassifier(object):
         # rospy.logwarn('TF classes {0} and scores {1}'.format(classes, scores))
 
         # Find traffic light with highest confidence level
-        conv_level = 0
+        conv_level = MINIMUM_CONFIDENCE
+        score = 0
         for i in range(boxes.shape[0]):
             if scores[i] > conv_level:
                 conv_level = scores[i]
@@ -98,8 +100,10 @@ class TLClassifier(object):
                     result = TrafficLight.RED
                 elif classes[i]  == 3: #'Yellow':
                     result = TrafficLight.YELLOW
+                
+                score = scores[i]
         
         # Debug traffic light output - Red: 0, 1: Yellow, 2: Green, 4: Unknown
-        rospy.logwarn('Traffic light {0}'.format(result))
+        rospy.logwarn('Traffic light {0} ({1})'.format(result, score))
 
         return result
