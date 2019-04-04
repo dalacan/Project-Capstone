@@ -92,8 +92,8 @@ class TLDetector(object):
         self.has_image = True
         self.camera_image = msg
 
-        # Process every IMAGE_PROCESS_RATE images
-        if self.image_process_count == 0:
+        # Process every IMAGE_PROCESS_RATE images (if not using simulator, process every image)
+        if self.image_process_count == 0 or not self.use_simulator:
             light_wp, state = self.process_traffic_lights()
         else:
             light_wp = self.last_wp
