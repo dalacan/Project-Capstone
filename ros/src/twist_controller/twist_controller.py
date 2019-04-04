@@ -21,8 +21,8 @@ class Controller(object):
         self.throttle_controller = PID(kp, ki, kd, mn, mx)
 
         tau = 0.5 # 1/(2pi*tau) = cutoff frequency
-        # ts = .02 # Sample time (50 hertz)
-        ts = .033 # Sample time (30 hertz)
+        ts = .02 # Sample time (50 hertz)
+        # ts = .033 # Sample time (30 hertz)
         self.vel_lpf = LowPassFilter(tau, ts)
 
         self.ang_vel_lpf = LowPassFilter(tau, ts)
@@ -43,6 +43,8 @@ class Controller(object):
             self.throttle_controller.reset()
             return 0., 0., 0.
 
+        # rospy.logwarn("Curr ang vel: {0}".format(current_ang_vel))
+
         current_vel = self.vel_lpf.filt(current_vel)
         current_ang_vel = self.ang_vel_lpf.filt(current_ang_vel)
 
@@ -51,7 +53,7 @@ class Controller(object):
         # rospy.logwarn("Current vel: {0}".format(current_vel))
 
         # If the difference between current angular velocity and target angular velocity is less than a set threshold, do not update steering
-        if abs(current_ang_vel - angular_vel) > 0.01:
+        if abs(current_ang_vel - angular_vel) > 0.02:
             steering = self.yaw_controller.get_steering(linear_vel, angular_vel, current_vel)
         else:
             steering = None
@@ -66,7 +68,8 @@ class Controller(object):
         throttle = self.throttle_controller.step(vel_error, sample_time)
 
         # Throttle to steering ratio function Reduce throttle for larger steerng
-        # throttle = -0.0015625 * steering * steering + throttle
+        # if steering is not None:
+        #     throttle = -0.0015625 * steering * steering + throttle
 
         brake = 0
 
