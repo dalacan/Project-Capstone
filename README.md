@@ -27,7 +27,7 @@ Phase 3: Traffic Light Detection
 Phase 4: Waypoint updater (full)
 
 The following is a system architecture diagram showing the ROS nodes and topics used in the project.
-(Note: add a image Here)
+!!!(Note: add a image Here)
 
 ## Phase 1: Waypoint Updater (Partial)
 
@@ -40,7 +40,7 @@ Inputs:
 ```/traffic_waypoint```: Published by Traffic Light Detection Node which published the waypoints to the traffic red light.
 ```/current_pose```: Current position published by the Car or the simulator. 
 
-(Note: add a image here)
+!!!(Note: add a image here)
 Output:
 ```/final_waypoints```
 The final waypoints is published which provides the fixed number of waypoints ahead of the vehicle.
@@ -53,7 +53,7 @@ Drive by wire (DBW) system will control the vehicle through controlling throttle
 
 Inputs and outputs
 This diagram illustrates the inputs and outputs for DBW node:
-(NOTE: add the image here)
+!!!(NOTE: add the image here)
  
 The inputs are:
 ```/current_velocity```: published by simulator and used by the DBW node to determine the linear velocity and provide it to controller.
@@ -63,7 +63,7 @@ The inputs are:
 The outputs from DBW node are throttle, steering, and brake commands published to throttle_cmd, steering_cmd, and brake_cmd respectively.
 
 Implementation
-The ```dbw_node.py``` logic calls the Controller and Control objects based on linear_vel, angular_vel, current_vel, and dbw_enabled to produce throttle, brake, and steering commands. If DBW node is enabled, throttle, braking and steering computed through the Controller will be published to ```/vehicle/throttle_cmd```, ```/vehicle/braking_cmd````, and`` /vehicle/steering_cmd``` respectively.
+The ```dbw_node.py``` logic calls the Controller and Control objects based on linear_vel, angular_vel, current_vel, and dbw_enabled to produce throttle, brake, and steering commands. If DBW node is enabled, throttle, braking and steering computed through the Controller will be published to ```/vehicle/throttle_cmd```, ```/vehicle/braking_cmd```, and ```/vehicle/steering_cmd``` respectively.
 
 The Controller logics within the ```twist_controller.py``` employs the PID.py to give a control on throttle command. The steering commands are calculated through ```yaw_controller.py```. Both throttle and steering commands are smoothed by a low pass filter from ```lowpass.py```.
 
@@ -87,8 +87,8 @@ The inputs and outputs are already described in the Phase 1: Waypoint_updater (P
 Implementation:
 The target velocity is set for the waypoints leading up to the red traffic lights to bring the vehicle to a smooth stop. 
 The velocity is calculated based on the following formula. And in the graph, we can see how the velocity is gradually decreasing instead of a linear reduction, taking into account the max deceleration and the stopping distance. The max deceleration is set to 0.5 m/s^2 and stopping distance is calculated based on the closest id of the red traffic light.
-                                      Velocity= √(2*MaxDeceleration*Distance)
-(NOTE: add the corresponding image here)
+                                      ```Velocity= √(2*MaxDeceleration*Distance)```
+!!!(NOTE: add the corresponding image here)
 
 This way the Waypoint_updater publishes the final waypoints considering the target velocity of the car to the waypoint follower, which again is sent to the DBW node which controls the braking and accelerating the car. 
 
