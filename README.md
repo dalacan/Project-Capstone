@@ -9,7 +9,7 @@ Self-Driving Car Engineer Nanodegree Programm
 
 | Name                           | github link |
 |--------------------------------|-------------|
-| Derrick Choo (lead)            |             |
+| Derrick Choo (lead)            | https://github.com/dalacan            |
 | Chidhanandh Krishnaraj         |              |
 | Libin Jia                      |               |
 | Michael Zill                   |  https://github.com/taunusflieger            |
