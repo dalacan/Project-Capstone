@@ -71,29 +71,29 @@ provides the trajectory for the ego car to move around.
 
 Inputs:
 
-/base\_waypoints: Published by Waypoint\_loader, which is the static
+```/base_waypoints```: Published by ```Waypoint_loader```, which is the static
 waypoints which are the list of all the waypoints from the track.
 Waypoints as provided by a static .csv file.
 
-/obstacle\_waypoints: Published by the Obstacle detection module.
+```/obstacle_waypoints```: Published by the Obstacle detection module.
 
-/traffic\_waypoint: Published by Traffic Light Detection Node which
+```/traffic_waypoint```: Published by Traffic Light Detection Node which
 published the waypoints to the traffic red light.
 
-/current\_pose: Current position published by the Car or the
+```/current_pose```: Current position published by the Car or the
 simulator.
 <img src="./media/Picture2.png">
 
 Output:
 
-/final\_waypoints
+```/final_waypoints```
 
 The final waypoints is published which provides the fixed number of
 waypoints ahead of the vehicle.
 
 The total number of waypoints ahead of the vehicle that should be
-included in the /final\_waypoints list is provided by the LOOKAHEAD\_WPS
-(200 in this case) variable in *waypoint\_updater.py*.
+included in the ```/final_waypoints``` list is provided by the ```LOOKAHEAD_WPS```
+(200 in this case) variable in ```waypoint_updater.py```.
 
 ## Phase 2: DBW 
 
@@ -101,7 +101,7 @@ included in the /final\_waypoints list is provided by the LOOKAHEAD\_WPS
 
 Drive by wire (DBW) system will control the vehicle through controlling
 throttle, braking, and steering. The DBW node logic accepts linear and
-angular velocity by subscribing to twist\_cmd and publish the throttle,
+angular velocity by subscribing to ```twist_cmd``` and publish the throttle,
 brake, and steering commands. The DBW node can be disabled and the
 driver can control it.
 
@@ -114,32 +114,32 @@ This diagram illustrates the inputs and outputs for DBW node:
 
 The inputs are:
 
-/current\_velocity: published by simulator and used by the DBW node to
+```/current_velocity```: published by simulator and used by the DBW node to
 determine the linear velocity and provide it to controller.
 
-/twist\_cmd: Waypoint\_follower node publishes it and subscribed by DBW
+```/twist_cmd```: Waypoint\_follower node publishes it and subscribed by DBW
 node to publish throttle, steering and brake commands.
 
-/vehicledbw\_enable: pusblished by simulator. DBW will determine whether
+```/vehicledbw_enable```: pusblished by simulator. DBW will determine whether
 or not to publish throttle, steering, and brake information to
 respective topics.
 
 The outputs from DBW node are throttle, steering, and brake commands
-published to throttle\_cmd, steering\_cmd, and brake\_cmd respectively.
+published to ```throttle_cmd```, ```steering_cmd```, and ```brake_cmd``` respectively.
 
 ### Implementation
 
-The dbw\_node.py logic calls the Controller and Control objects based on
-linear\_vel, angular\_vel, current\_vel, and dbw\_enabled to produce
+The ```dbw_node.py``` logic calls the Controller and Control objects based on
+```linear_vel```, ```angular_vel```, ```current_vel```, and ```dbw_enabled``` to produce
 throttle, brake, and steering commands. If DBW node is enabled,
 throttle, braking and steering computed through the Controller will be
-published to /vehicle/throttle\_cmd, /vehicle/braking\_cmd, and
-/vehicle/steering\_cmd respectively.
+published to ```/vehicle/throttle_cmd```, ```/vehicle/braking_cmd```, and
+```/vehicle/steering_cmd``` respectively.
 
-The Controller logics within the twist\_controller.py employs the PID.py
+The Controller logics within the ```twist_controller.py``` employs the ```PID.py```
 to give a control on throttle command. The steering commands are
-calculated through yaw\_controller.py. Both throttle and steering
-commands are smoothed by a low pass filter from lowpass.py.
+calculated through ```yaw_controller.py```. Both throttle and steering
+commands are smoothed by a low pass filter from ```lowpass.py```.
 
 
 ## Phase 3: Traffic Light Detection
@@ -149,18 +149,18 @@ lights (in this project, obstacles are not detected), and publishes
 useful messages to other subsystems. The traffic light detection node is
 a core element of the solution as it informs about the presence and
 state of traffic lights based on the images it receives from the camera.
-This node subscribes to the data from the /image\_color, /current\_pose,
-and /base\_waypoints topics, and publishes the stop line to the nearest
-red traffic light to the topic /traffic\_waypoint. The input messages
-are the car's current position (from /current\_pose topic), camera
-images (from /image\_color), and a complete list of waypoints (from
-/base\_waypoints), while the output of the detection and classification
+This node subscribes to the data from the ```/image_color```, ```/current_pose```,
+and ```/base_waypoints``` topics, and publishes the stop line to the nearest
+red traffic light to the topic ```/traffic_waypoint```. The input messages
+are the car's current position (from ```/current_pose``` topic), camera
+images (from ```/image_color```), and a complete list of waypoints (from
+```/base_waypoints```), while the output of the detection and classification
 node is the state of the traffic light, and the index of the closest
-stop line (-1 if not exists)(publishes to /traffic\_waypoint). The
+stop line (-1 if not exists)(publishes to ```/traffic_waypoint```). The
 module consists of two parts:
 
 1.  Traffic light classifier. The classifier uses a TensorFlow based CNN
-    (ssd\_inception\_v2\_coco) for object detection. The model has been
+    (```ssd_inception_v2_coco```) for object detection. The model has been
     trained with a udacity provided data set. Given that the real-world
     scenario and the simulator are quite different, we created to
     different trained models – one for each scenario.
@@ -179,7 +179,7 @@ module consists of two parts:
     | faster_rcnn_inception_v2_coco  | 79.7                 | 97.5        |
     | faster_rcnn_resnet101_coco     | 201                  | 97.5        |
 
-    It turned out that ssd\_inception\_v2\_coco provides a good balance
+    It turned out that ```ssd_inception_v2_coco``` provides a good balance
 between speed and accuracy. The following images show some samples of
 test data which we used to verify the trained model.
 
@@ -216,7 +216,7 @@ traffic light state. The predicted state has to occur
 it; otherwise the previous stable state is used. This is applied as a
 damper to avoid the sudden velocity change, and smooth the vehicle
 behaviour. The ```image_cb()``` identifies the upcoming red light at
-camera frequency, and publishesthe index of the waypoint closest to the
+camera frequency, and publishes the index of the waypoint closest to the
 red light's stop line to the topic ```/traffic_waypoint```.
 
 ## Phase 4: Waypoint Updater (Full)
@@ -232,7 +232,7 @@ when the traffic signal changes to RED and the velocity will increase
 when the traffic signal changes to GREEN.
 
 The inputs and outputs are already described in the Phase 1:
-Waypoint\_updater (Partial) section.
+Waypoint_updater (Partial) section.
 
 ### Implementation:
 
@@ -257,7 +257,7 @@ car.
 
 *“Topics that could be used to improve the performance of the vehicle”*
 
-*Conclusion*
+## Conclusion
 
 
 
@@ -271,7 +271,7 @@ car.
 
 
 
-
+# Setup Instructions
 
 This is the project repo for the final project of the Udacity Self-Driving Car Nanodegree: Programming a Real Self-Driving Car. For more information about the project, see the project introduction [here](https://classroom.udacity.com/nanodegrees/nd013/parts/6047fe34-d93c-4f50-8336-b70ef10cb4b2/modules/e1a23b06-329a-4684-a717-ad476f0d8dff/lessons/462c933d-9f24-42d3-8bdc-a08a5fc866e4/concepts/5ab4b122-83e6-436d-850f-9f4d26627fd9).
 
