@@ -4,19 +4,19 @@ Self-Driving Car Engineer Nanodegree Programm
 
 ## Project – Capstone
 
-**Authors**:
+**Team**:
 
-Derrick Choo
 
-Chidhanandh Krishnaraj
+| Name                           | github link |
+|--------------------------------|-------------|
+| Derrick Choo (lead)            |             |
+| Chidhanandh Krishnaraj         |              |
+| Libin Jia                      |               |
+| Michael Zill                   |  https://github.com/taunusflieger            |
+| Siqi Ying                      |           |
 
-Libin Jia
 
-Michael Zill
 
-Siqi Ying
-
-Version 2.0
 
 This document provides brief description of how the Capstone project was
 completed with different section explained in detail and what steps were
