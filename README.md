@@ -183,6 +183,11 @@ module consists of two parts:
 between speed and accuracy. The following images show some samples of
 test data which we used to verify the trained model.
 
+    The following images depict on the left side the inferred image and on the right side the ground truth image.
+
+    <img src="./media/image_training1.png">
+    <img src="./media/image_training2.png">
+
     Simulator test samples:
 
     <img src="./media/download1.png"><img src="./media/download2.png">
