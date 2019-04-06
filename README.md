@@ -1,6 +1,8 @@
-**Self-Driving Car Engineer Nanodegree Programm**
+Self-Driving Car Engineer Nanodegree Programm
+=============================================
 
-**Project – Capstone**
+
+## Project – Capstone
 
 **Authors**:
 
@@ -20,7 +22,7 @@ This document provides brief description of how the Capstone project was
 completed with different section explained in detail and what steps were
 followed.
 
-*Abstract:*
+### Abstract
 
 In Automobile Industry, the expectation towards the driver assistance
 and driver safety arouse the need of autonomously driving vehicles which
@@ -31,13 +33,13 @@ main goal which is to make the Car drive by itself in the simulator and
 in the real world with real time environment (Carla) considering
 obstacles and traffic lights.
 
-*Goal:*
+### Goal
 
 To make the Ego car drive by itself in the traffic situations and
 following the right trajectory to reach the goal point in the Simulator
 and in the real world (Carla).
 
-*TODO:*
+### TODO
 
 We will be writing ROS nodes to implement core functionality of the
 autonomous vehicle system, including traffic light detection, control,
@@ -60,9 +62,9 @@ topics used in the project.
 
 <img src="./media/Picture1.png">
 
-*Phase 1: Waypoint Updater (Partial)*
+## Phase 1: Waypoint Updater (Partial
 
-Description:
+### Description
 
 The waypoint updater node will publish the final waypoints which
 provides the trajectory for the ego car to move around.
@@ -93,9 +95,9 @@ The total number of waypoints ahead of the vehicle that should be
 included in the /final\_waypoints list is provided by the LOOKAHEAD\_WPS
 (200 in this case) variable in *waypoint\_updater.py*.
 
-*Phase 2: DBW *
+## Phase 2: DBW 
 
-Description:
+### Description
 
 Drive by wire (DBW) system will control the vehicle through controlling
 throttle, braking, and steering. The DBW node logic accepts linear and
@@ -103,7 +105,7 @@ angular velocity by subscribing to twist\_cmd and publish the throttle,
 brake, and steering commands. The DBW node can be disabled and the
 driver can control it.
 
-Inputs and outputs
+### Inputs and outputs
 
 This diagram illustrates the inputs and outputs for DBW node:
 
@@ -125,7 +127,7 @@ respective topics.
 The outputs from DBW node are throttle, steering, and brake commands
 published to throttle\_cmd, steering\_cmd, and brake\_cmd respectively.
 
-Implementation
+### Implementation
 
 The dbw\_node.py logic calls the Controller and Control objects based on
 linear\_vel, angular\_vel, current\_vel, and dbw\_enabled to produce
@@ -140,12 +142,7 @@ calculated through yaw\_controller.py. Both throttle and steering
 commands are smoothed by a low pass filter from lowpass.py.
 
 
-
-
-
-
-
-*Phase 3: Traffic Light Detection*
+## Phase 3: Traffic Light Detection
 
 The Perception subsystem here senses the surrounding world for traffic
 lights (in this project, obstacles are not detected), and publishes
@@ -198,28 +195,28 @@ test data which we used to verify the trained model.
 
 1.  The traffic light detection uses the information provided by the
     traffic light classifier to perform a traffic light detection. The
-    *get\_light\_state( )* function can determine the current color of
+    ```get_light_state()``` function can determine the current color of
     the traffic light (ID of traffic light color, UNKNOWN=4, GREEN=2,
     YELLOW=1, RED=0). The traffic light state detection and
     classification was finished by the function
-    get*\_classification(image)* in class *TLClassifier* which is coded
-    in *tl\_classifier.py*. The *process\_traffic\_lights()* can finally
+    ```get_classification(image)``` in class ```TLClassifier``` which is coded
+    in ```tl_classifier.py```. The ```process_traffic_lights()``` can finally
     find the closest visible traffic light (index of waypoint closes to
     the upcoming stop line for a traffic light), and determines its
-    location and color in *tl\_detector.py*.
+    location and color in ```tl_detector.py```.
 
 However, the current detected state is not regarded as the predicted
 traffic light state. The predicted state has to occur
-STATE\_COUNT\_THRESHOLD（here = 3) number of times till we start using
+```STATE_COUNT_THRESHOLD```（here = 3) number of times till we start using
 it; otherwise the previous stable state is used. This is applied as a
 damper to avoid the sudden velocity change, and smooth the vehicle
-behaviour. The *image\_cb( )* identifies the upcoming red light at
+behaviour. The ```image_cb()``` identifies the upcoming red light at
 camera frequency, and publishesthe index of the waypoint closest to the
-red light's stop line to the topic */traffic\_waypoint*.
+red light's stop line to the topic ```/traffic_waypoint```.
 
-*Phase 4: Waypoint Updater (Full)*
+## Phase 4: Waypoint Updater (Full)
 
-Description:
+### Description:
 
 The Waypoint Updater (full) is the extension of the phase 1 Waypoint
 updater, which publishes the final waypoints based on traffic light
@@ -232,7 +229,7 @@ when the traffic signal changes to GREEN.
 The inputs and outputs are already described in the Phase 1:
 Waypoint\_updater (Partial) section.
 
-Implementation:
+### Implementation:
 
 The target velocity is set for the waypoints leading up to the red
 traffic lights to bring the vehicle to a smooth stop.
@@ -244,7 +241,7 @@ stopping distance. The max deceleration is set to 0.5 m/s\^2 and
 stopping distance is calculated based on the closest id of the red
 traffic light.
 
-$$Velocity = \ \sqrt{}\left( 2*MaxDeceleration*Distance \right)$$
+<img src="./media/Picture4.png">
 
 This way the Waypoint\_updater publishes the final waypoints considering
 the target velocity of the car to the waypoint follower, which again is
