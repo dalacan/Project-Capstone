@@ -9,11 +9,11 @@ Self-Driving Car Engineer Nanodegree Programm
 
 | Name                           | github link | email                |
 |--------------------------------|-------------|----------------------|
-| Derrick Choo (lead)            | https://github.com/dalacan            | .  |
-| Chidhanandh Krishnaraj         |              |             |
-| Libin Jia                      |               |             |
+| Derrick Choo (lead)            | https://github.com/dalacan            | dalacan@gmail.com  |
+| Chidhanandh Krishnaraj         |              | chidhukrishraj@gmail.com            |
+| Libin Jia                      |               | jlbmtu@gmail.com   |
 | Michael Zill                   |  https://github.com/taunusflieger            | michael.zill@accenture.com |
-| Siqi Ying                      |           | .     |
+| Siqi Ying                      |           | siqiying1117@gmail.com>    |
 
 
 
