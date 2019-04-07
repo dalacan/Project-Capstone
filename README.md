@@ -60,9 +60,9 @@ Phase 4: Waypoint updater (full)
 The following is a system architecture diagram showing the ROS nodes and
 topics used in the project.
 
-<img src="./media/Picture1.png">
+![alt-text](./media/Picture1.png "System Architecture")
 
-## Phase 1: Waypoint Updater (Partial
+## Phase 1: Waypoint Updater (Partial)
 
 ### Description
 
@@ -82,7 +82,7 @@ published the waypoints to the traffic red light.
 
 ```/current_pose```: Current position published by the Car or the
 simulator.
-<img src="./media/Picture2.png">
+![alt-text](./media/Picture2.png "Waypoint updater node")
 
 Output:
 
@@ -109,8 +109,7 @@ driver can control it.
 
 This diagram illustrates the inputs and outputs for DBW node:
 
-
-<img src="./media/Picture3.png">
+![alt-text](./media/Picture3.png "DBW Node")
 
 The inputs are:
 
@@ -185,18 +184,18 @@ test data which we used to verify the trained model.
 
     The following images depict on the left side the inferred image and on the right side the ground truth image.
 
-    <img src="./media/image_training1.png">
-    <img src="./media/image_training2.png">
+    ![alt-text](./media/image_training1.png "Inference image 1")
+    ![alt-text](./media/image_training2.png "Inference image 2")
 
     Simulator test samples:
 
-    <img src="./media/download1.png"><img src="./media/download2.png">
-
+    ![alt-text](./media/download3.png "Real world camera test 2")
+    ![alt-text](./media/download4.png "Real world camera test 2")
 
     Real-world parking lot test samples:
-
-    <img src="./media/download3.png"><img src="./media/download4.png">
-
+    
+    ![alt-text](./media/download1.png "Real world camera test 1")
+    ![alt-text](./media/download2.png "Real world camera test 2")
 
 1.  The traffic light detection uses the information provided by the
     traffic light classifier to perform a traffic light detection. The
@@ -246,7 +245,7 @@ stopping distance. The max deceleration is set to 0.5 m/s\^2 and
 stopping distance is calculated based on the closest id of the red
 traffic light.
 
-<img src="./media/Picture4.png">
+![alt-text](./media/Picture4.png "Deceleration graph")
 
 This way the Waypoint\_updater publishes the final waypoints considering
 the target velocity of the car to the waypoint follower, which again is
