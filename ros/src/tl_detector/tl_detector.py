@@ -19,7 +19,7 @@ STATE_COUNT_THRESHOLD = 3
 IMAGE_PROCESS_RATE = 5
 
 class TLDetector(object):
-      def __init__(self):
+    def __init__(self):
         rospy.init_node('tl_detector')
 
         self.pose = None
