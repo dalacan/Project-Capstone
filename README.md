@@ -13,7 +13,7 @@ Self-Driving Car Engineer Nanodegree Programm
 | Chidhanandh Krishnaraj         |              | chidhukrishraj@gmail.com            |
 | Libin Jia                      |               | libinj@mtu.edu   |
 | Michael Zill                   |  https://github.com/taunusflieger            | michael.zill@accenture.com |
-| Siqi Ying                      |           | siqiying1117@gmail.com    |
+| Siqi Ying                      |  https://github.com/Saki147         | siqiying1117@gmail.com    |
 
 
 
