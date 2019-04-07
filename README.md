@@ -9,11 +9,11 @@ Self-Driving Car Engineer Nanodegree Programm
 
 | Name                           | github link | email                |
 |--------------------------------|-------------|----------------------|
-| Derrick Choo (lead)            | https://github.com/dalacan            | dalacan@gmail.com  |
-| Chidhanandh Krishnaraj         |              | chidhukrishraj@gmail.com            |
-| Libin Jia                      |               | libinj@mtu.edu   |
-| Michael Zill                   |  https://github.com/taunusflieger            | michael.zill@accenture.com |
-| Siqi Ying                      |  https://github.com/Saki147         | siqiying1117@gmail.com    |
+| Derrick Choo (lead)            | https://github.com/dalacan           | dalacan@gmail.com  |
+| Chidhanandh Krishnaraj         | https://github.com/chidhukrishraj    | chidhukrishraj@gmail.com            |
+| Libin Jia                      | https://github.com/jiajia0700822     | libinj@mtu.edu       |
+| Michael Zill                   | https://github.com/taunusflieger     | michael.zill@accenture.com |
+| Siqi Ying                      | https://github.com/Saki147           | siqiying1117@gmail.com    |
 
 
 
@@ -39,7 +39,7 @@ To make the Ego car drive by itself in the traffic situations and
 following the right trajectory to reach the goal point in the Simulator
 and in the real world (Carla).
 
-### Action
+### Development Plan
 
 We will be developing ROS nodes to implement core functionality of the
 autonomous vehicle system, including traffic light detection, control,
