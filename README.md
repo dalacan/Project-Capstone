@@ -168,7 +168,86 @@ module consists of two parts:
     training data which is based on the provided ros-bag file for the
     real-world scenario and simulator images we saved from driving on
     the simulator track.\
-    We than experimented with different CNN models to find a good
+    
+    The end-to-end steps to training the model are:
+    1. Data preparation
+    2. Data labelling
+    3. Data augmentation
+    4. Training
+    5. Testing
+    
+    ### Data preparation
+    To prepare the data for training the simulation model
+    1. We launch both the ros application `roslaunch launch/styx.launch` and the simulator.
+    2. Once the simulator is connected to the ros application, next we start to record 
+    the camera stream from the simulator car by running `rosbag record /image_color` 
+    3. In the simulator, check the 'Camera' checkbox and drive around the track to 
+    capture the traffic lights in their different states and from varying distances
+    4. To save the recording, close the rosbag recording session by pressing `Ctrl+C`
+    5. To extract the images from the rosbag file, we developed a ros image extraction script: [export.launch](./scripts/extract_images/export.launch). 
+        1. To use the script in a terminal, run `roscore`
+        2. In a second terminal, run `roslaunch export.launch bagfile:=/path/to/bagfile.bag topic:=image_color`
+        3. The images will be extracted to the `/home/.ros/` directory
+    
+    To prepare the data for training the parking lot (real world) model:
+    1. We downloaded the provided camera images from the provided [training bag file](https://s3-us-west-1.amazonaws.com/udacity-selfdrivingcar/traffic_light_bag_file.zip)
+    2. Next we extract the images out of the bag file, by using our ros image extraction script (refer above for instructions).
+    
+    ### Data labelling
+    To label the data we used the [Labellmg](https://github.com/tzutalin/labelImg) tool.
+    
+    ### Data augmentation
+    For the real world model, we analyzed the provided images and most of the images are in ideal driving conditions. 
+    However, in order to develop a most robust traffic light classification system, we decided to consider external 
+    factors that may impact the traffic light classification inference. Once such factor was the weather conditioans. 
+    Thus we developed an [image augmentation library](./scripts/image_augmentation) to create augmentations of the 
+    provided image to simulate various weather events.
+    
+    The augmentation library caters for following weather conditions:
+    - Sunny day - increasing the brightness of the image
+    ![alt-text](./media/sunny.jpg)
+    - Overcast day - decreasing the brightness of the image
+    ![alt-text](./media/overcast.jpg)
+    - Raining day - Adding rain effects to the image
+    ![alt-text](./media/rain.jpg)
+    - Foggy day - Adding fog effects to the image
+    ![alt-text](./media/fog.jpg)
+    - Rain and fog - Combining rain and fog effects to the image
+    ![alt-text](./media/rain_fog.jpg)
+    
+    ### Training the model
+    To train the model, we used a pre-trained model. In our exploration, we trained the following models with
+    our traffic light images:
+    - ssd_mobilenet_v2_coco
+    - ssd_inception_v2_coco
+    - faster_rcnn_inception_v2_coco
+    - faster_rcnn_resnet101_coco
+    
+    We also explored training the model using the [Bosch traffic dataset](https://hci.iwr.uni-heidelberg.de/node/6132). 
+    However, in our testing, we found that using the scenario specific dataset (simulator and parking lot) yield a much
+    significantly more accurate traffic light detection and classification.
+    
+    The following steps illustrate the steps to training the model
+    1. Consolidate the label data into a single csv file
+    2. Generate the required tensorflow records for both training and validation with a 70%/30% data split. 
+    **Important** When splitting the data, it is important that the augmented data is only included in the training 
+    data as we only want to validate against real world images. Ideally we would have a set of actual images that 
+    covers various weather conditions.
+    3. Download the required pre-train model from [Tensorflow detection model zoo] (https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md)
+    4. Configure the pipeline.config
+    5. Perform the training:
+        1. Locally - refer to instructions here: https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/running_locally.md)
+        2. On Google Cloud - refer to instructions here: https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/running_on_cloud.md
+    6. Once the training is completed, you will need to freeze the model. **Important:** When freezing the model, it is 
+    important to freeze the model using Tensorflow 1.3 which the ros application (and carla) is using.
+       
+    ### Testing
+    To test our models, we used a jupyter notebook to test and explore the speed and accuracy of the models.
+    The notebooks can be found here:
+    - [Simulator](https://github.com/dalacan/traffic-light-classification/blob/master/Traffic%20Light%20Detection%20-%20Simulator.ipynb)
+    - [Parking lot (Real world)](https://github.com/dalacan/traffic-light-classification/blob/master/Traffic%20Light%20Detection%20-%20Real%20World.ipynb)
+    
+    Using the notebook, we experimented with different CNN models to find a good
     balance between inference speed and accuracy.
 
     | Model                          | Inference speed ms   | Accuracy %  |
@@ -189,8 +268,8 @@ test data which we used to verify the trained model.
 
     Simulator test samples:
 
-    ![alt-text](./media/download3.png "Real world camera test 2")
-    ![alt-text](./media/download4.png "Real world camera test 2")
+    ![alt-text](./media/download3.png "Simulation test 1")
+    ![alt-text](./media/download4.png "Simulation test 2")
 
     Real-world parking lot test samples:
     
