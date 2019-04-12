@@ -104,6 +104,6 @@ class TLClassifier(object):
                 score = scores[i]
         
         # Debug traffic light output - Red: 0, 1: Yellow, 2: Green, 4: Unknown
-        rospy.logwarn('Traffic light {0} ({1})'.format(result, score))
+        # rospy.logwarn('Traffic light {0} ({1})'.format(result, score))
 
         return result
