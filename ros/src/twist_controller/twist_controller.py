@@ -40,7 +40,9 @@ class Controller(object):
         # TODO: Change the arg, kwarg list to suit your needs
 
         if not dbw_enabled:
+            # Reset throttle and steering
             self.throttle_controller.reset()
+            self.yaw_controller.reset()
             return 0., 0., 0.
 
         # rospy.logwarn("Curr ang vel: {0}".format(current_ang_vel))
@@ -52,11 +54,7 @@ class Controller(object):
         # rospy.logwarn("Target vel: {0}".format(linear_vel))
         # rospy.logwarn("Current vel: {0}".format(current_vel))
 
-        # If the difference between current angular velocity and target angular velocity is less than a set threshold, do not update steering
-        if abs(current_ang_vel - angular_vel) > 0.02:
-            steering = self.yaw_controller.get_steering(linear_vel, angular_vel, current_vel)
-        else:
-            steering = None
+        steering = self.yaw_controller.get_steering(linear_vel, angular_vel, current_vel, current_ang_vel)
             
         vel_error = linear_vel - current_vel
         self.last_vel = current_vel

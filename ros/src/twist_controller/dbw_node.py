@@ -116,10 +116,8 @@ class DBWNode(object):
 
         scmd = SteeringCmd()
         scmd.enable = True
-        # If steering is not set, do not update steering
-        if steer is not None:
-            scmd.steering_wheel_angle_cmd = steer
-            self.steer_pub.publish(scmd)
+        scmd.steering_wheel_angle_cmd = steer
+        self.steer_pub.publish(scmd)
 
         bcmd = BrakeCmd()
         bcmd.enable = True
